@@ -228,7 +228,7 @@ class _PaymentSummarySectionView extends StatelessWidget {
                       children: [
                         Icon(
                           Icons.energy_savings_leaf,
-                          size: AppDimens.kMediumIconSize,
+                          size: AppDimens.kSmallIconSize,
                           color: AppColors.kPrimaryColor,
                         ),
                         SizedBox(width: AppDimens.kMargin12),
@@ -239,7 +239,7 @@ class _PaymentSummarySectionView extends StatelessWidget {
                             textFontSize: AppDimens.kFont16,
                           ),
                         ),
-                        Icon(Icons.arrow_forward_ios, size: AppDimens.kMediumIconSize),
+                        Icon(Icons.arrow_forward_ios, size: AppDimens.kSmallIconSize),
                       ],
                     ),
                   ),
@@ -258,7 +258,7 @@ class _PaymentSummarySectionView extends StatelessWidget {
 
                     CustomizedTextView(
                       textData: "\$ ${bloc.priceForAll ?? bloc.pricePerOne}",
-                      textFontWeight: FontWeight.w500,
+                      textFontWeight: FontWeight.w600,
                     ),
                   ],
                 ),
@@ -267,10 +267,19 @@ class _PaymentSummarySectionView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     CustomizedTextView(textData: kTextDeliveryFee),
-
-                    CustomizedTextView(
-                      textData: "\$ ${bloc.deliFee}",
-                      textFontWeight: FontWeight.w500,
+                    Row(
+                      children: [
+                        ///TODO: bind with real discount data
+                        CustomizedTextView(
+                          textData: "\$ 2.0",
+                          textDecoration: TextDecoration.lineThrough,
+                        ),
+                        SizedBox(width: AppDimens.kMargin16),
+                        CustomizedTextView(
+                          textData: "\$ ${bloc.deliFee}",
+                          textFontWeight: FontWeight.w600,
+                        ),
+                      ],
                     ),
                   ],
                 ),
