@@ -6,6 +6,9 @@ const String kTextOnBoardingDesc =
     "Welcome to our cozy coffee corner, where every cup is a delightful for you.";
 const String kTextGetStarted = "Get Started";
 
+///Home page
+const String kTextAllCoffee = "All Coffee";
+
 ///Detail page
 const String kTextDetail = "Detail";
 const String kTextDescription = "Description";
@@ -23,3 +26,9 @@ const String kTextPaymentSummary = "Payment Summary";
 const String kTextDeliveryFee = "Delivery Fee";
 const String kTextOrder = "Order";
 const String kTextCashOrWallet = "Cash/Wallet";
+
+
+///Firebase key
+const String kFirebaseRefCoffeeList = "coffees_list";
+const String kFirebaseRefCoffeeCategories = "categories";
+
