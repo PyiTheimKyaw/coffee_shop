@@ -40,10 +40,7 @@ class OrderPage extends StatelessWidget {
         ),
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(AppDimens.kOrderTabOptionHeight),
-          child: Responsive(
-            mobile: _OptionTabView(),
-            tablet: _OptionTabView(isTablet: true),
-          ),
+          child: Responsive(mobile: _OptionTabView(), tablet: _OptionTabView(isTablet: true)),
         ),
       ),
       body: Responsive(
@@ -143,13 +140,8 @@ class _ResponsiveOrderPageView extends StatelessWidget {
           children: [
             _DeliveryAddressAndProductItemSectionView(),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: AppDimens.kMargin12,
-              ),
-              child: Divider(
-                color: AppColors.kPrimaryColor.withValues(alpha: 0.2),
-                thickness: 3,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: AppDimens.kMargin12),
+              child: Divider(color: AppColors.kPrimaryColor.withValues(alpha: 0.2), thickness: 3),
             ),
             _PaymentSummarySectionView(isTablet: isTablet),
           ],
@@ -176,9 +168,7 @@ class _PaymentSummarySectionView extends StatelessWidget {
             alignment: Alignment.center,
             child: Container(
               width:
-                  (isTablet ?? false)
-                      ? MediaQuery.of(context).size.width * 0.5
-                      : double.infinity,
+                  (isTablet ?? false) ? MediaQuery.of(context).size.width * 0.5 : double.infinity,
               padding: EdgeInsets.symmetric(
                 vertical: AppDimens.kMargin12,
                 horizontal: AppDimens.kMargin16,
@@ -205,10 +195,7 @@ class _PaymentSummarySectionView extends StatelessWidget {
                       textFontSize: AppDimens.kFont16,
                     ),
                   ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: AppDimens.kMediumIconSize,
-                  ),
+                  Icon(Icons.arrow_forward_ios, size: AppDimens.kMediumIconSize),
                 ],
               ),
             ),
@@ -225,10 +212,7 @@ class _PaymentSummarySectionView extends StatelessWidget {
             children: [
               CustomizedTextView(textData: kTextPrice),
 
-              CustomizedTextView(
-                textData: "\$ 4.04",
-                textFontWeight: FontWeight.w500,
-              ),
+              CustomizedTextView(textData: "\$ 4.04", textFontWeight: FontWeight.w500),
             ],
           ),
           SizedBox(height: AppDimens.kMargin8),
@@ -237,10 +221,7 @@ class _PaymentSummarySectionView extends StatelessWidget {
             children: [
               CustomizedTextView(textData: kTextDeliveryFee),
 
-              CustomizedTextView(
-                textData: "\$ 4.04",
-                textFontWeight: FontWeight.w500,
-              ),
+              CustomizedTextView(textData: "\$ 4.04", textFontWeight: FontWeight.w500),
             ],
           ),
         ],
@@ -281,15 +262,9 @@ class _DeliveryAddressAndProductItemSectionView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ButtonWithIconAndText(
-                btnLabel: kTextEditAddress,
-                icon: Icons.edit,
-              ),
+              ButtonWithIconAndText(btnLabel: kTextEditAddress, icon: Icons.edit),
               SizedBox(width: AppDimens.kMargin12),
-              ButtonWithIconAndText(
-                btnLabel: kTextAddNote,
-                icon: Icons.event_note,
-              ),
+              ButtonWithIconAndText(btnLabel: kTextAddNote, icon: Icons.event_note),
             ],
           ),
           Padding(
@@ -347,10 +322,7 @@ class _DeliveryAddressAndProductItemSectionView extends StatelessWidget {
                       ),
                     ),
                     SizedBox(width: AppDimens.kMargin16),
-                    CustomizedTextView(
-                      textData: "1",
-                      textFontWeight: FontWeight.w600,
-                    ),
+                    CustomizedTextView(textData: "1", textFontWeight: FontWeight.w600),
                     SizedBox(width: AppDimens.kMargin16),
 
                     Card(
@@ -378,10 +350,7 @@ class _OptionTabView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
-      width:
-          (isTablet ?? false)
-              ? MediaQuery.of(context).size.width * 0.6
-              : double.infinity,
+      width: (isTablet ?? false) ? MediaQuery.of(context).size.width * 0.6 : double.infinity,
       padding: EdgeInsets.all(AppDimens.kMargin4),
       decoration: BoxDecoration(
         color: AppColors.kTabBgColor,
@@ -408,10 +377,7 @@ class _TabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppDimens.kMargin24,
-        vertical: AppDimens.kMargin10,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24, vertical: AppDimens.kMargin10),
       decoration: BoxDecoration(
         color: (isSelected ?? false) ? AppColors.kPrimaryColor : null,
         borderRadius: BorderRadius.circular(AppDimens.kRadius10),
@@ -419,13 +385,9 @@ class _TabView extends StatelessWidget {
       child: Center(
         child: CustomizedTextView(
           textData: tabLabel,
-          textFontWeight:
-              (isSelected ?? false) ? FontWeight.w600 : FontWeight.w400,
+          textFontWeight: (isSelected ?? false) ? FontWeight.w600 : FontWeight.w400,
           textFontSize: AppDimens.kFont14,
-          textColor:
-              (isSelected ?? false)
-                  ? AppColors.kWhiteColor
-                  : AppColors.kBlackColor,
+          textColor: (isSelected ?? false) ? AppColors.kWhiteColor : AppColors.kBlackColor,
         ),
       ),
     );

@@ -41,10 +41,8 @@ class PrimaryButton extends StatelessWidget {
       },
       child: Container(
         padding: EdgeInsets.symmetric(
-          vertical:
-              (isIconOnly ?? false) ? AppDimens.kMargin5 : AppDimens.kMargin12,
-          horizontal:
-              (isIconOnly ?? false) ? AppDimens.kMargin5 : AppDimens.kMargin4,
+          vertical: (isIconOnly ?? false) ? AppDimens.kMargin5 : AppDimens.kMargin12,
+          horizontal: (isIconOnly ?? false) ? AppDimens.kMargin5 : AppDimens.kMargin4,
         ),
         width:
             (btnWidth != null)
@@ -56,9 +54,7 @@ class PrimaryButton extends StatelessWidget {
         decoration: ShapeDecoration(
           color: AppColors.kPrimaryColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(
-              btnRadius ?? AppDimens.kRadius16,
-            ),
+            borderRadius: BorderRadius.circular(btnRadius ?? AppDimens.kRadius16),
           ),
           shadows: boxShadow != null ? [boxShadow!] : [],
         ),

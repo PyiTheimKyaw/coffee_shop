@@ -23,7 +23,10 @@ class HomePage extends StatelessWidget {
                 statusBarIconBrightness: Brightness.light,
                 statusBarColor: AppColors.kHomePageHeaderBgColor,
               ),
-              expandedHeight: MediaQuery.of(context).size.height * 0.4,
+              expandedHeight:
+                  (Responsive.isSmallMobile(context))
+                      ? MediaQuery.of(context).size.height * 0.5
+                      : MediaQuery.of(context).size.height * 0.4,
               flexibleSpace: FlexibleSpaceBar(
                 background: Responsive(
                   mobile: _SearchBarAndBannerSectionView(),
@@ -94,18 +97,9 @@ class HomePage extends StatelessWidget {
           unselectedItemColor: Colors.grey,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_border),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications_none),
-              label: "",
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              label: "",
-            ),
+            BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.notifications_none), label: ""),
+            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ""),
           ],
         ),
       ),
@@ -227,8 +221,9 @@ class _SearchBarAndBannerSectionView extends StatelessWidget {
     final screenHeight = MediaQuery.of(context).size.height;
 
     // Heights
-    final headerHeight = screenHeight * 0.3;
-    final promoCardHeight = 150.0;
+    final headerHeight =
+        (Responsive.isSmallMobile(context)) ? screenHeight * 0.4 : screenHeight * 0.3;
+    final promoCardHeight = (Responsive.isSmallMobile(context)) ? 120.0 : 150.0;
     final promoTop = headerHeight - (promoCardHeight / 2);
     return Stack(
       children: [
@@ -237,8 +232,7 @@ class _SearchBarAndBannerSectionView extends StatelessWidget {
           height: headerHeight,
           color: AppColors.kHomePageHeaderBgColor,
           padding: EdgeInsets.only(
-            top:
-                (isTablet ?? false) ? AppDimens.kMargin50 : AppDimens.kMargin30,
+            top: (isTablet ?? false) ? AppDimens.kMargin50 : AppDimens.kMargin30,
             left: AppDimens.kMargin24,
             right: AppDimens.kMargin24,
           ),
@@ -272,10 +266,7 @@ class _SearchBarAndBannerSectionView extends StatelessWidget {
                         children: [
                           Icon(Icons.search, color: Colors.white54),
                           SizedBox(width: 10),
-                          Text(
-                            "Search coffee",
-                            style: TextStyle(color: Colors.white54),
-                          ),
+                          Text("Search coffee", style: TextStyle(color: Colors.white54)),
                         ],
                       ),
                     ),
@@ -322,10 +313,7 @@ class _StatusSectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(
-        top: AppDimens.kMargin12,
-        bottom: AppDimens.kMargin8,
-      ),
+      padding: const EdgeInsets.only(top: AppDimens.kMargin12, bottom: AppDimens.kMargin8),
       height: 50,
       color: AppColors.kAppBgColor,
       child: ListView.separated(
@@ -334,8 +322,7 @@ class _StatusSectionView extends StatelessWidget {
         itemBuilder: (context, index) {
           return _OptionItemView(isSelected: true);
         },
-        separatorBuilder:
-            (context, index) => const SizedBox(width: AppDimens.kMargin8),
+        separatorBuilder: (context, index) => const SizedBox(width: AppDimens.kMargin8),
         itemCount: 10,
       ),
     );
@@ -350,24 +337,15 @@ class _OptionItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppDimens.kMargin8,
-        vertical: AppDimens.kMargin4,
-      ),
+      padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin8, vertical: AppDimens.kMargin4),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppDimens.kRadius10),
-        color:
-            (isSelected ?? false)
-                ? AppColors.kPrimaryColor
-                : AppColors.kLightGreyColor,
+        color: (isSelected ?? false) ? AppColors.kPrimaryColor : AppColors.kLightGreyColor,
       ),
       child: Center(
         child: CustomizedTextView(
           textData: "textData",
-          textColor:
-              (isSelected ?? false)
-                  ? AppColors.kWhiteColor
-                  : AppColors.kBlackColor,
+          textColor: (isSelected ?? false) ? AppColors.kWhiteColor : AppColors.kBlackColor,
         ),
       ),
     );
@@ -379,11 +357,7 @@ class _CustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   final double maxHeight;
   final Widget child;
 
-  _CustomHeaderDelegate({
-    required this.minHeight,
-    required this.maxHeight,
-    required this.child,
-  });
+  _CustomHeaderDelegate({required this.minHeight, required this.maxHeight, required this.child});
 
   @override
   double get minExtent => minHeight;
@@ -392,11 +366,7 @@ class _CustomHeaderDelegate extends SliverPersistentHeaderDelegate {
   double get maxExtent => maxHeight;
 
   @override
-  Widget build(
-    BuildContext context,
-    double shrinkOffset,
-    bool overlapsContent,
-  ) {
+  Widget build(BuildContext context, double shrinkOffset, bool overlapsContent) {
     return child;
   }
 

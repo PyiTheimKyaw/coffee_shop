@@ -1,8 +1,7 @@
 const String kAppName = "Coffee Shop";
 
 ///Onboarding page
-const String kTextOnBoardingTitle =
-    "Fall in Love with Coffee in Blissful Delight!";
+const String kTextOnBoardingTitle = "Fall in Love with Coffee in Blissful Delight!";
 const String kTextOnBoardingDesc =
     "Welcome to our cozy coffee corner, where every cup is a delightful for you.";
 const String kTextGetStarted = "Get Started";
