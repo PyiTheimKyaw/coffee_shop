@@ -6,6 +6,7 @@ class AppColors {
   static const Color kBlackColor = Color(0xFF333333);
   static const Color kWhiteColor = Colors.white;
   static const Color kPrimaryColor = Color(0xFFc77d4f);
+  static const Color kLightPrimaryColor = Color.fromRGBO(249, 242, 237, 1.0);
   static const Color kRedColor = Colors.red;
   static const Color kWarningColor = Color(0xFFDA2631);
   static const Color kDarkPrimaryColor = Color(0xFF266EA2);

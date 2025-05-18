@@ -1,3 +1,4 @@
+import 'package:coffee_shop/data/vos/coffee_vo.dart';
 import 'package:coffee_shop/pages/index_page.dart';
 import 'package:go_router/go_router.dart';
 import '../pages/detail_page.dart';
@@ -22,7 +23,10 @@ class AppRouter {
           GoRoute(
             name: RouteConstants.kRouteDetails,
             path: 'detail',
-            builder: (context, state) => const DetailPage(),
+            builder: (context, state) {
+              final coffee = state.extra! as CoffeeVO?;
+             return  DetailPage(coffee: coffee,);
+            },
           ),
           GoRoute(
             name: RouteConstants.kRouteOrder,

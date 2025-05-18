@@ -109,7 +109,7 @@ class _ProductItemView extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushNamed(RouteConstants.kRouteDetails);
+        context.pushNamed(RouteConstants.kRouteDetails, extra: coffee);
       },
       child: Container(
         padding: EdgeInsets.all(AppDimens.kMargin8),
