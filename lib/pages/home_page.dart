@@ -13,99 +13,76 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: CustomScrollView(
-          slivers: [
-            SliverAppBar(
-              backgroundColor: AppColors.kAppBgColor,
-              systemOverlayStyle: SystemUiOverlayStyle(
-                statusBarIconBrightness: Brightness.light,
-                statusBarColor: AppColors.kHomePageHeaderBgColor,
-              ),
-              expandedHeight:
-                  (Responsive.isSmallMobile(context))
-                      ? MediaQuery.of(context).size.height * 0.5
-                      : MediaQuery.of(context).size.height * 0.4,
-              flexibleSpace: FlexibleSpaceBar(
-                background: Responsive(
-                  mobile: _SearchBarAndBannerSectionView(),
-                  tablet: _SearchBarAndBannerSectionView(isTablet: true),
-                ),
-              ),
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          backgroundColor: AppColors.kAppBgColor,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarIconBrightness: Brightness.light,
+            statusBarColor: AppColors.kHomePageHeaderBgColor,
+          ),
+          expandedHeight:
+          (Responsive.isSmallMobile(context))
+              ? MediaQuery.of(context).size.height * 0.5
+              : MediaQuery.of(context).size.height * 0.4,
+          flexibleSpace: FlexibleSpaceBar(
+            background: Responsive(
+              mobile: _SearchBarAndBannerSectionView(),
+              tablet: _SearchBarAndBannerSectionView(isTablet: true),
             ),
-            SliverPersistentHeader(
-              pinned: true,
-              delegate: _CustomHeaderDelegate(
-                minHeight: 50,
-                maxHeight: 50,
-                child: const _StatusSectionView(),
-              ),
-            ),
-            Responsive(
-              mobile: SliverPadding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppDimens.kMargin24,
-                  vertical: AppDimens.kMargin12,
-                ),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    mainAxisSpacing: AppDimens.kMargin12,
-                    crossAxisSpacing: AppDimens.kMargin8,
-                    childAspectRatio: 0.7,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _ProductItemView(),
-                    childCount: 20,
-                  ),
-                ),
-              ),
-              tablet: SliverPadding(
-                padding: EdgeInsets.symmetric(
-                  horizontal: AppDimens.kMargin24,
-                  vertical: AppDimens.kMargin12,
-                ),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    mainAxisSpacing: AppDimens.kMargin12,
-                    crossAxisSpacing: AppDimens.kMargin8,
-                    childAspectRatio: 1,
-                  ),
-                  delegate: SliverChildBuilderDelegate(
-                    (context, index) => _ProductItemView(),
-                    childCount: 20,
-                  ),
-                ),
-              ),
-            ),
-            // SliverList(
-            //   delegate: SliverChildBuilderDelegate((context, index) {
-            //     return Container(
-            //       height: 100,
-            //       margin: const EdgeInsets.only(bottom: AppDimens.kMargin16),
-            //       color: Colors.red,
-            //     );
-            //   }, childCount: 10),
-            // ),
-          ],
+          ),
         ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: 0,
-          selectedItemColor: Colors.brown,
-          unselectedItemColor: Colors.grey,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite_border), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.notifications_none), label: ""),
-            BottomNavigationBarItem(icon: Icon(Icons.person_outline), label: ""),
-          ],
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: _CustomHeaderDelegate(
+            minHeight: 50,
+            maxHeight: 50,
+            child: const _StatusSectionView(),
+          ),
         ),
-      ),
+        Responsive(
+          mobile: SliverPadding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppDimens.kMargin24,
+              vertical: AppDimens.kMargin12,
+            ),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: AppDimens.kMargin12,
+                crossAxisSpacing: AppDimens.kMargin8,
+                childAspectRatio: 0.7,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                    (context, index) => _ProductItemView(),
+                childCount: 20,
+              ),
+            ),
+          ),
+          tablet: SliverPadding(
+            padding: EdgeInsets.symmetric(
+              horizontal: AppDimens.kMargin24,
+              vertical: AppDimens.kMargin12,
+            ),
+            sliver: SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3,
+                mainAxisSpacing: AppDimens.kMargin12,
+                crossAxisSpacing: AppDimens.kMargin8,
+                childAspectRatio: 1,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                    (context, index) => _ProductItemView(),
+                childCount: 20,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
+
 
 class _ProductItemView extends StatelessWidget {
   const _ProductItemView();

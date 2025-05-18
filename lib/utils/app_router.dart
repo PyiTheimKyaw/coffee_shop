@@ -1,3 +1,4 @@
+import 'package:coffee_shop/pages/index_page.dart';
 import 'package:go_router/go_router.dart';
 import '../pages/detail_page.dart';
 import '../pages/home_page.dart';
@@ -15,9 +16,9 @@ class AppRouter {
         builder: (context, state) => const OnBoardingPage(),
       ),
       GoRoute(
-        name: RouteConstants.kRouteHome,
-        path: '/home',
-        builder: (context, state) => const HomePage(),
+        name: RouteConstants.kRouteIndex,
+        path: '/index',
+        builder: (context, state) => const IndexPage(),
         routes: [
           GoRoute(
             name: RouteConstants.kRouteDetails,

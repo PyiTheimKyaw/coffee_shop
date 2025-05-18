@@ -75,7 +75,7 @@ class _OnBoardingResponsiveView extends StatelessWidget {
 
                     onTapBtn: () {
                       //navigate to home page
-                      context.goNamed(RouteConstants.kRouteHome);
+                      context.goNamed(RouteConstants.kRouteIndex);
                     },
                     btnTextColor: AppColors.kWhiteColor,
                   ),
