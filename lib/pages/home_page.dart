@@ -1,12 +1,16 @@
+import 'package:coffee_shop/bloc/home_page_bloc.dart';
+import 'package:coffee_shop/data/vos/coffee_vo.dart';
 import 'package:coffee_shop/utils/colors.dart';
 import 'package:coffee_shop/utils/images.dart';
 import 'package:coffee_shop/utils/responsive.dart';
 import 'package:coffee_shop/utils/route_constants.dart';
+import 'package:coffee_shop/utils/strings.dart';
 import 'package:coffee_shop/widgets/customized_text_view.dart';
 import 'package:coffee_shop/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/dimens.dart';
 
@@ -15,84 +19,97 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScrollView(
-      slivers: [
-        SliverAppBar(
-          backgroundColor: AppColors.kAppBgColor,
-          systemOverlayStyle: SystemUiOverlayStyle(
-            statusBarIconBrightness: Brightness.light,
-            statusBarColor: AppColors.kHomePageHeaderBgColor,
-          ),
-          expandedHeight:
-              (Responsive.isSmallMobile(context))
-                  ? MediaQuery.of(context).size.height * 0.5
-                  : MediaQuery.of(context).size.height * 0.4,
-          flexibleSpace: FlexibleSpaceBar(
-            background: Responsive(
-              mobile: _SearchBarAndBannerSectionView(),
-              tablet: _SearchBarAndBannerSectionView(isTablet: true),
-            ),
-          ),
-        ),
-        SliverPersistentHeader(
-          pinned: true,
-          delegate: _CustomHeaderDelegate(
-            minHeight: 50,
-            maxHeight: 50,
-            child: const _StatusSectionView(),
-          ),
-        ),
-        Responsive(
-          mobile: SliverPadding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppDimens.kMargin24,
-              vertical: AppDimens.kMargin12,
-            ),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: AppDimens.kMargin12,
-                crossAxisSpacing: AppDimens.kMargin8,
-                childAspectRatio: 0.7,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => _ProductItemView(),
-                childCount: 20,
-              ),
-            ),
-          ),
-          tablet: SliverPadding(
-            padding: EdgeInsets.symmetric(
-              horizontal: AppDimens.kMargin24,
-              vertical: AppDimens.kMargin12,
-            ),
-            sliver: SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 3,
-                mainAxisSpacing: AppDimens.kMargin12,
-                crossAxisSpacing: AppDimens.kMargin8,
-                childAspectRatio: 1,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (context, index) => _ProductItemView(),
-                childCount: 20,
-              ),
-            ),
-          ),
-        ),
-      ],
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => HomePageBloc(),
+      child: Consumer<HomePageBloc>(
+        builder:
+            (BuildContext context, bloc, Widget? child) =>
+                (bloc.coffeeListByCategory.isNotEmpty)
+                    ? CustomScrollView(
+                      slivers: [
+                        SliverAppBar(
+                          backgroundColor: AppColors.kAppBgColor,
+                          systemOverlayStyle: SystemUiOverlayStyle(
+                            statusBarIconBrightness: Brightness.light,
+                            statusBarColor: AppColors.kHomePageHeaderBgColor,
+                          ),
+                          expandedHeight:
+                              (Responsive.isSmallMobile(context))
+                                  ? MediaQuery.of(context).size.height * 0.5
+                                  : MediaQuery.of(context).size.height * 0.4,
+                          flexibleSpace: FlexibleSpaceBar(
+                            background: Responsive(
+                              mobile: _SearchBarAndBannerSectionView(),
+                              tablet: _SearchBarAndBannerSectionView(isTablet: true),
+                            ),
+                          ),
+                        ),
+                        SliverPersistentHeader(
+                          pinned: true,
+                          delegate: _CustomHeaderDelegate(
+                            minHeight: 50,
+                            maxHeight: 50,
+                            child: const _StatusSectionView(),
+                          ),
+                        ),
+                        Responsive(
+                          mobile: SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppDimens.kMargin24,
+                              vertical: AppDimens.kMargin12,
+                            ),
+                            sliver: SliverGrid(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                mainAxisSpacing: AppDimens.kMargin12,
+                                crossAxisSpacing: AppDimens.kMargin8,
+                                childAspectRatio: 0.7,
+                              ),
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) =>
+                                    _ProductItemView(coffee: bloc.coffeeListByCategory[index]),
+                                childCount: bloc.coffeeListByCategory.length,
+                              ),
+                            ),
+                          ),
+                          tablet: SliverPadding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: AppDimens.kMargin24,
+                              vertical: AppDimens.kMargin12,
+                            ),
+                            sliver: SliverGrid(
+                              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                mainAxisSpacing: AppDimens.kMargin12,
+                                crossAxisSpacing: AppDimens.kMargin8,
+                                childAspectRatio: 1,
+                              ),
+                              delegate: SliverChildBuilderDelegate(
+                                (context, index) =>
+                                    _ProductItemView(coffee: bloc.coffeeListByCategory[index]),
+                                childCount: bloc.coffeeListByCategory.length,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                    : Center(child: CircularProgressIndicator()),
+      ),
     );
   }
 }
 
 class _ProductItemView extends StatelessWidget {
-  const _ProductItemView();
+  const _ProductItemView({required this.coffee});
+
+  final CoffeeVO? coffee;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        context.pushNamed(RouteConstants.kRouteDetails);
+        context.pushNamed(RouteConstants.kRouteDetails, extra: coffee);
       },
       child: Container(
         padding: EdgeInsets.all(AppDimens.kMargin8),
@@ -139,7 +156,7 @@ class _ProductItemView extends StatelessWidget {
                               size: AppDimens.kSmallIconSize,
                             ),
                             CustomizedTextView(
-                              textData: "4.8",
+                              textData: coffee?.rating.toString() ?? "",
                               textColor: AppColors.kWhiteColor,
                               textFontSize: AppDimens.kFont10,
                             ),
@@ -153,7 +170,7 @@ class _ProductItemView extends StatelessWidget {
             ),
             SizedBox(height: AppDimens.kMargin8),
             CustomizedTextView(
-              textData: "Coffee mocha Coffee mocha Coffee mocha, Coffee mocha",
+              textData: coffee?.name ?? "",
               overflow: TextOverflow.ellipsis,
               textFontWeight: FontWeight.w600,
               textFontSize: AppDimens.kFont14,
@@ -161,7 +178,7 @@ class _ProductItemView extends StatelessWidget {
             SizedBox(height: AppDimens.kMargin4),
 
             CustomizedTextView(
-              textData: "Deep Form,Coffee mocha,Coffee mocha,Coffee mocha",
+              textData: coffee?.category ?? "",
               overflow: TextOverflow.ellipsis,
               textFontSize: AppDimens.kFont12,
               textColor: AppColors.kGreyColor,
@@ -173,13 +190,15 @@ class _ProductItemView extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 CustomizedTextView(
-                  textData: "\$ 4.52",
+                  textData: "\$ ${coffee?.price.first.amount}",
                   textFontWeight: FontWeight.w600,
                   textFontSize: AppDimens.kFont16,
                 ),
 
                 PrimaryButton(
-                  onTapBtn: () {},
+                  onTapBtn: () {
+                    context.pushNamed(RouteConstants.kRouteDetails, extra: coffee);
+                  },
                   isDense: true,
                   btnRadius: AppDimens.kRadius10,
                   btnIcon: Icon(Icons.add, color: AppColors.kWhiteColor),
@@ -223,46 +242,64 @@ class _SearchBarAndBannerSectionView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomizedTextView(
-                textData: "Location",
+                textData: kTextLocation,
                 textColor: AppColors.kGreyColor,
                 textFontSize: AppDimens.kFont14,
               ),
               SizedBox(height: AppDimens.kMargin4),
-              CustomizedTextView(
-                textData: "Bilzen, Tanjungbalai",
-                textColor: AppColors.kWhiteColor,
-                textFontSize: AppDimens.kFont18,
-                textFontWeight: FontWeight.bold,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomizedTextView(
+                    textData: kTextDummyCustomerAddress,
+                    textColor: AppColors.kWhiteColor,
+                    textFontSize: AppDimens.kFont18,
+                    textFontWeight: FontWeight.bold,
+                  ),
+                  SizedBox(width: AppDimens.kMargin12),
+                  Icon(
+                    Icons.expand_more_outlined,
+                    color: AppColors.kWhiteColor,
+                    size: AppDimens.kMediumIconSize,
+                  ),
+                ],
               ),
               SizedBox(height: AppDimens.kMargin20),
               Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white10,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.search, color: Colors.white54),
-                          SizedBox(width: 10),
-                          Text("Search coffee", style: TextStyle(color: Colors.white54)),
-                        ],
+                    child: TextField(
+                      cursorColor: AppColors.kPrimaryColor,
+                      style: TextStyle(color: AppColors.kWhiteColor),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColors.kTextFieldColor,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: AppColors.kWhiteColor,
+                          size: AppDimens.kMediumIconSize,
+                        ),
+                        hintText: kTextSearchCoffee,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.kTextFieldColor),
+                          borderRadius: BorderRadius.circular(AppDimens.kRadius12),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.kTextFieldColor),
+                          borderRadius: BorderRadius.circular(AppDimens.kRadius12),
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: AppDimens.kMargin12),
                   Container(
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Color(0xFFdd855d),
-                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.kPrimaryColor,
+                      borderRadius: BorderRadius.circular(AppDimens.kMargin12),
                     ),
-                    child: Icon(Icons.tune, color: Colors.white),
+                    child: Icon(Icons.tune, color: AppColors.kWhiteColor),
                   ),
                 ],
               ),
@@ -295,40 +332,71 @@ class _StatusSectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.only(top: AppDimens.kMargin12, bottom: AppDimens.kMargin8),
-      height: 50,
-      color: AppColors.kAppBgColor,
-      child: ListView.separated(
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
-        itemBuilder: (context, index) {
-          return _OptionItemView(isSelected: true);
-        },
-        separatorBuilder: (context, index) => const SizedBox(width: AppDimens.kMargin8),
-        itemCount: 10,
-      ),
+    return Consumer<HomePageBloc>(
+      builder:
+          (BuildContext context, bloc, Widget? child) => Container(
+            padding: const EdgeInsets.only(top: AppDimens.kMargin12, bottom: AppDimens.kMargin8),
+            height: 50,
+            color: AppColors.kAppBgColor,
+            child: ListView.separated(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
+              itemBuilder: (context, index) {
+                if (index == 0) {
+                  return _OptionItemView(
+                    optionLabel: kTextAllCoffee,
+                    isSelected: bloc.selectedCategory == kTextAllCoffee,
+                    onChooseCategory: () {
+                      bloc.onChooseCategory(kTextAllCoffee);
+                    },
+                  );
+                } else {
+                  final category = bloc.categories?[index - 1] ?? "";
+                  return _OptionItemView(
+                    optionLabel: category,
+                    isSelected: bloc.selectedCategory == category,
+                    onChooseCategory: () {
+                      bloc.onChooseCategory(category);
+                    },
+                  );
+                }
+              },
+              separatorBuilder: (context, index) => const SizedBox(width: AppDimens.kMargin8),
+              itemCount: (bloc.categories?.length ?? 0) + 1,
+            ),
+          ),
     );
   }
 }
 
 class _OptionItemView extends StatelessWidget {
-  const _OptionItemView({this.isSelected = false});
+  const _OptionItemView({
+    this.isSelected = false,
+    required this.optionLabel,
+    required this.onChooseCategory,
+  });
 
   final bool? isSelected;
+  final String optionLabel;
+  final VoidCallback onChooseCategory;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin8, vertical: AppDimens.kMargin4),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(AppDimens.kRadius10),
-        color: (isSelected ?? false) ? AppColors.kPrimaryColor : AppColors.kLightGreyColor,
-      ),
-      child: Center(
-        child: CustomizedTextView(
-          textData: "textData",
-          textColor: (isSelected ?? false) ? AppColors.kWhiteColor : AppColors.kBlackColor,
+    return GestureDetector(
+      onTap: () {
+        onChooseCategory();
+      },
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin8, vertical: AppDimens.kMargin4),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(AppDimens.kRadius10),
+          color: (isSelected ?? false) ? AppColors.kPrimaryColor : AppColors.kLightGreyColor,
+        ),
+        child: Center(
+          child: CustomizedTextView(
+            textData: optionLabel,
+            textColor: (isSelected ?? false) ? AppColors.kWhiteColor : AppColors.kBlackColor,
+          ),
         ),
       ),
     );
