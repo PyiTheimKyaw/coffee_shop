@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:coffee_shop/utils/colors.dart';
 import 'package:coffee_shop/utils/dimens.dart';
 import 'package:coffee_shop/utils/strings.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:go_router/go_router.dart';
@@ -69,27 +70,11 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
         );
       });
     } catch (e) {
-      print('Error getting location: $e');
+      if (kDebugMode) {
+        print('Error getting location: $e');
+      }
     }
   }
-
-  // void getCurrentLocation() async {
-  //   Location location = Location();
-  //   try{
-  //   currentLocation =await location.getLocation();}catch(e){
-  //     print("Location error => $e");
-  //   }
-  //   GoogleMapController googleMapController = await _controller.future;
-  //   location.onLocationChanged.listen((newLoc) {
-  //     currentLocation = newLoc;
-  //     googleMapController.animateCamera(
-  //       CameraUpdate.newCameraPosition(
-  //         CameraPosition(zoom: 13.5, target: LatLng(newLoc.latitude!, newLoc.longitude!)),
-  //       ),
-  //     );
-  //     setState(() {});
-  //   });
-  // }
 
   void getPolyPoints() async {
     PolylinePoints polylinePoints = PolylinePoints();
@@ -151,6 +136,7 @@ class _OrderTrackingPageState extends State<OrderTrackingPage> {
                   _controller.complete(mapController);
                 },
               ),
+          //Back Button
           Positioned(
             top: kToolbarHeight,
             left: 15,
