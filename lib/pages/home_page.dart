@@ -1,6 +1,8 @@
 import 'package:coffee_shop/utils/colors.dart';
+import 'package:coffee_shop/utils/images.dart';
 import 'package:coffee_shop/utils/responsive.dart';
 import 'package:coffee_shop/widgets/customized_text_view.dart';
+import 'package:coffee_shop/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -32,22 +34,184 @@ class HomePage extends StatelessWidget {
             SliverPersistentHeader(
               pinned: true,
               delegate: _CustomHeaderDelegate(
-                minHeight: 70,
-                maxHeight: 70,
+                minHeight: 50,
+                maxHeight: 50,
                 child: const _StatusSectionView(),
               ),
             ),
-            SliverList(
-              delegate: SliverChildBuilderDelegate((context, index) {
-                return Container(
-                  height: 100,
-                  margin: const EdgeInsets.only(bottom: AppDimens.kMargin16),
-                  color: Colors.red,
-                );
-              }, childCount: 10),
+            Responsive(
+              mobile: SliverPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppDimens.kMargin24,
+                  vertical: AppDimens.kMargin12,
+                ),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: AppDimens.kMargin12,
+                    crossAxisSpacing: AppDimens.kMargin8,
+                    childAspectRatio: 0.7,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => _ProductItemView(),
+                    childCount: 20,
+                  ),
+                ),
+              ),
+              tablet: SliverPadding(
+                padding: EdgeInsets.symmetric(
+                  horizontal: AppDimens.kMargin24,
+                  vertical: AppDimens.kMargin12,
+                ),
+                sliver: SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: AppDimens.kMargin12,
+                    crossAxisSpacing: AppDimens.kMargin8,
+                    childAspectRatio: 1,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) => _ProductItemView(),
+                    childCount: 20,
+                  ),
+                ),
+              ),
+            ),
+            // SliverList(
+            //   delegate: SliverChildBuilderDelegate((context, index) {
+            //     return Container(
+            //       height: 100,
+            //       margin: const EdgeInsets.only(bottom: AppDimens.kMargin16),
+            //       color: Colors.red,
+            //     );
+            //   }, childCount: 10),
+            // ),
+          ],
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: 0,
+          selectedItemColor: Colors.brown,
+          unselectedItemColor: Colors.grey,
+          items: [
+            BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.favorite_border),
+              label: "",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.notifications_none),
+              label: "",
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              label: "",
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class _ProductItemView extends StatelessWidget {
+  const _ProductItemView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: EdgeInsets.all(AppDimens.kMargin8),
+      decoration: BoxDecoration(
+        color: AppColors.kWhiteColor,
+        borderRadius: BorderRadius.circular(AppDimens.kRadius12),
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Expanded(
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(AppDimens.kRadius12),
+              child: Stack(
+                children: [
+                  Image.asset(
+                    AppImages.kDummyDetailBG,
+                    fit: BoxFit.cover,
+                    width: double.infinity,
+                    height: double.infinity,
+                  ),
+                  Align(
+                    alignment: Alignment.topRight,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppDimens.kMargin8,
+                        vertical: AppDimens.kMargin8,
+                      ),
+                      decoration: ShapeDecoration(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(AppDimens.kRadius30),
+                          ),
+                        ),
+                        color: Colors.white.withValues(alpha: 0.08),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: AppColors.kPrimaryColor,
+                            size: AppDimens.kSmallIconSize,
+                          ),
+                          CustomizedTextView(
+                            textData: "4.8",
+                            textColor: AppColors.kWhiteColor,
+                            textFontSize: AppDimens.kFont10,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(height: AppDimens.kMargin8),
+          CustomizedTextView(
+            textData: "Coffee mocha Coffee mocha Coffee mocha, Coffee mocha",
+            overflow: TextOverflow.ellipsis,
+            textFontWeight: FontWeight.w600,
+            textFontSize: AppDimens.kFont14,
+          ),
+          SizedBox(height: AppDimens.kMargin4),
+
+          CustomizedTextView(
+            textData: "Deep Form,Coffee mocha,Coffee mocha,Coffee mocha",
+            overflow: TextOverflow.ellipsis,
+            textFontSize: AppDimens.kFont12,
+            textColor: AppColors.kGreyColor,
+            textFontWeight: FontWeight.w500,
+          ),
+          SizedBox(height: AppDimens.kMargin8),
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              CustomizedTextView(
+                textData: "\$ 4.52",
+                textFontWeight: FontWeight.w600,
+                textFontSize: AppDimens.kFont16,
+              ),
+
+              PrimaryButton(
+                onTapBtn: () {},
+                isDense: true,
+                btnRadius: AppDimens.kRadius10,
+                btnIcon: Icon(Icons.add, color: AppColors.kWhiteColor),
+                isIconOnly: true,
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -69,8 +233,67 @@ class _SearchBarAndBannerSectionView extends StatelessWidget {
     return Stack(
       children: [
         Container(
+          // padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
           height: headerHeight,
           color: AppColors.kHomePageHeaderBgColor,
+          padding: EdgeInsets.only(
+            top:
+                (isTablet ?? false) ? AppDimens.kMargin50 : AppDimens.kMargin30,
+            left: AppDimens.kMargin24,
+            right: AppDimens.kMargin24,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              CustomizedTextView(
+                textData: "Location",
+                textColor: AppColors.kGreyColor,
+                textFontSize: AppDimens.kFont14,
+              ),
+              SizedBox(height: AppDimens.kMargin4),
+              CustomizedTextView(
+                textData: "Bilzen, Tanjungbalai",
+                textColor: AppColors.kWhiteColor,
+                textFontSize: AppDimens.kFont18,
+                textFontWeight: FontWeight.bold,
+              ),
+              SizedBox(height: AppDimens.kMargin20),
+              Row(
+                children: [
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      height: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.white10,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(Icons.search, color: Colors.white54),
+                          SizedBox(width: 10),
+                          Text(
+                            "Search coffee",
+                            style: TextStyle(color: Colors.white54),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 10),
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Color(0xFFdd855d),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(Icons.tune, color: Colors.white),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
         Positioned(
           top: promoTop,
@@ -103,13 +326,13 @@ class _StatusSectionView extends StatelessWidget {
         top: AppDimens.kMargin12,
         bottom: AppDimens.kMargin8,
       ),
-      height: 70,
-      color: Colors.white,
+      height: 50,
+      color: AppColors.kAppBgColor,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
         itemBuilder: (context, index) {
-          return _OptionItemView(isSelected: true,);
+          return _OptionItemView(isSelected: true);
         },
         separatorBuilder:
             (context, index) => const SizedBox(width: AppDimens.kMargin8),
@@ -127,7 +350,10 @@ class _OptionItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(AppDimens.kMargin8),
+      padding: EdgeInsets.symmetric(
+        horizontal: AppDimens.kMargin8,
+        vertical: AppDimens.kMargin4,
+      ),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(AppDimens.kRadius10),
         color:
