@@ -1,5 +1,10 @@
+import 'package:coffee_shop/bloc/index_page_bloc.dart';
+import 'package:coffee_shop/pages/bookmarks_page.dart';
+import 'package:coffee_shop/pages/cart_page.dart';
 import 'package:coffee_shop/pages/home_page.dart';
+import 'package:coffee_shop/pages/noti_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/colors.dart';
 import '../utils/dimens.dart';
@@ -9,35 +14,73 @@ class IndexPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: HomePage(),
-        bottomNavigationBar: SizedBox(
-          height: kBottomNavigationBarHeight,
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _NavigationBarItemView(
-                icon: Icons.home,
-                index: 0,
-                isSelected: true,
-                onTapIndex: (index) {},
+    Widget getPage(int index) {
+      switch (index) {
+        case 0:
+          return HomePage();
+        case 1:
+          return BookmarksPage();
+        case 2:
+          return CartPage();
+        default:
+          return NotiPage();
+      }
+    }
+
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => IndexPageBloc(),
+      child: Selector<IndexPageBloc, int>(
+        selector: (BuildContext context, bloc) => bloc.index,
+        builder:
+            (BuildContext context, pageIndex, Widget? child) => SafeArea(
+              child: Scaffold(
+                body: getPage(pageIndex),
+                bottomNavigationBar: SizedBox(
+                  height: kBottomNavigationBarHeight,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _NavigationBarItemView(
+                        icon: Icons.home,
+                        index: 0,
+                        isSelected: pageIndex == 0,
+                        onTapIndex: (index) {
+                          final bloc = Provider.of<IndexPageBloc>(context, listen: false);
+                          bloc.onChangedIndex(index);
+                        },
+                      ),
+                      _NavigationBarItemView(
+                        icon: Icons.favorite_border,
+                        index: 1,
+                        isSelected: pageIndex == 1,
+                        onTapIndex: (index) {
+                          final bloc = Provider.of<IndexPageBloc>(context, listen: false);
+                          bloc.onChangedIndex(index);
+                        },
+                      ),
+                      _NavigationBarItemView(
+                        icon: Icons.shopping_cart_rounded,
+                        index: 2,
+                        isSelected: pageIndex == 2,
+                        onTapIndex: (index) {
+                          final bloc = Provider.of<IndexPageBloc>(context, listen: false);
+                          bloc.onChangedIndex(index);
+                        },
+                      ),
+                      _NavigationBarItemView(
+                        icon: Icons.notifications_none,
+                        index: 3,
+                        isSelected: pageIndex == 3,
+                        onTapIndex: (index) {
+                          final bloc = Provider.of<IndexPageBloc>(context, listen: false);
+                          bloc.onChangedIndex(index);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
               ),
-              _NavigationBarItemView(icon: Icons.favorite_border, index: 1, onTapIndex: (index) {}),
-              _NavigationBarItemView(
-                icon: Icons.shopping_cart_rounded,
-                index: 2,
-                onTapIndex: (index) {},
-              ),
-              _NavigationBarItemView(
-                icon: Icons.notifications_none,
-                index: 3,
-                onTapIndex: (index) {},
-              ),
-            ],
-          ),
-        ),
+            ),
       ),
     );
   }
@@ -64,28 +107,33 @@ class _NavigationBarItemView extends StatelessWidget {
           onTapIndex(index);
         },
         child: AnimatedContainer(
+          width: double.infinity,
+          height: double.infinity,
+          color: AppColors.kWhiteColor,
           duration: Duration(milliseconds: 200),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Icon(
-                icon,
-                size: AppDimens.kBottomNavIconSize,
-                color: (isSelected ?? false) ? AppColors.kPrimaryColor : AppColors.kGreyColor,
-              ),
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  icon,
+                  size: AppDimens.kBottomNavIconSize,
+                  color: (isSelected ?? false) ? AppColors.kPrimaryColor : AppColors.kGreyColor,
+                ),
 
-              Visibility(
-                visible: isSelected ?? false,
-                child: Container(
-                  height: 5,
-                  width: 10,
-                  decoration: BoxDecoration(
-                    color: AppColors.kPrimaryColor,
-                    borderRadius: BorderRadius.circular(AppDimens.kRadius30),
+                Visibility(
+                  visible: isSelected ?? false,
+                  child: Container(
+                    height: 5,
+                    width: 10,
+                    decoration: BoxDecoration(
+                      color: AppColors.kPrimaryColor,
+                      borderRadius: BorderRadius.circular(AppDimens.kRadius30),
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

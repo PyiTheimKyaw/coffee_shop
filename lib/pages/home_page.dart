@@ -1,10 +1,12 @@
 import 'package:coffee_shop/utils/colors.dart';
 import 'package:coffee_shop/utils/images.dart';
 import 'package:coffee_shop/utils/responsive.dart';
+import 'package:coffee_shop/utils/route_constants.dart';
 import 'package:coffee_shop/widgets/customized_text_view.dart';
 import 'package:coffee_shop/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 
 import '../utils/dimens.dart';
 
@@ -22,9 +24,9 @@ class HomePage extends StatelessWidget {
             statusBarColor: AppColors.kHomePageHeaderBgColor,
           ),
           expandedHeight:
-          (Responsive.isSmallMobile(context))
-              ? MediaQuery.of(context).size.height * 0.5
-              : MediaQuery.of(context).size.height * 0.4,
+              (Responsive.isSmallMobile(context))
+                  ? MediaQuery.of(context).size.height * 0.5
+                  : MediaQuery.of(context).size.height * 0.4,
           flexibleSpace: FlexibleSpaceBar(
             background: Responsive(
               mobile: _SearchBarAndBannerSectionView(),
@@ -54,7 +56,7 @@ class HomePage extends StatelessWidget {
                 childAspectRatio: 0.7,
               ),
               delegate: SliverChildBuilderDelegate(
-                    (context, index) => _ProductItemView(),
+                (context, index) => _ProductItemView(),
                 childCount: 20,
               ),
             ),
@@ -72,7 +74,7 @@ class HomePage extends StatelessWidget {
                 childAspectRatio: 1,
               ),
               delegate: SliverChildBuilderDelegate(
-                    (context, index) => _ProductItemView(),
+                (context, index) => _ProductItemView(),
                 childCount: 20,
               ),
             ),
@@ -83,106 +85,110 @@ class HomePage extends StatelessWidget {
   }
 }
 
-
 class _ProductItemView extends StatelessWidget {
   const _ProductItemView();
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(AppDimens.kMargin8),
-      decoration: BoxDecoration(
-        color: AppColors.kWhiteColor,
-        borderRadius: BorderRadius.circular(AppDimens.kRadius12),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(AppDimens.kRadius12),
-              child: Stack(
-                children: [
-                  Image.asset(
-                    AppImages.kDummyDetailBG,
-                    fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: double.infinity,
-                  ),
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: AppDimens.kMargin8,
-                        vertical: AppDimens.kMargin8,
-                      ),
-                      decoration: ShapeDecoration(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(AppDimens.kRadius30),
-                          ),
+    return InkWell(
+      onTap: () {
+        context.pushNamed(RouteConstants.kRouteDetails);
+      },
+      child: Container(
+        padding: EdgeInsets.all(AppDimens.kMargin8),
+        decoration: BoxDecoration(
+          color: AppColors.kWhiteColor,
+          borderRadius: BorderRadius.circular(AppDimens.kRadius12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(AppDimens.kRadius12),
+                child: Stack(
+                  children: [
+                    Image.asset(
+                      AppImages.kDummyDetailBG,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                      height: double.infinity,
+                    ),
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: AppDimens.kMargin8,
+                          vertical: AppDimens.kMargin8,
                         ),
-                        color: Colors.white.withValues(alpha: 0.08),
-                      ),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: AppColors.kPrimaryColor,
-                            size: AppDimens.kSmallIconSize,
+                        decoration: ShapeDecoration(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              bottomLeft: Radius.circular(AppDimens.kRadius30),
+                            ),
                           ),
-                          CustomizedTextView(
-                            textData: "4.8",
-                            textColor: AppColors.kWhiteColor,
-                            textFontSize: AppDimens.kFont10,
-                          ),
-                        ],
+                          color: Colors.white.withValues(alpha: 0.08),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.star,
+                              color: AppColors.kPrimaryColor,
+                              size: AppDimens.kSmallIconSize,
+                            ),
+                            CustomizedTextView(
+                              textData: "4.8",
+                              textColor: AppColors.kWhiteColor,
+                              textFontSize: AppDimens.kFont10,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          SizedBox(height: AppDimens.kMargin8),
-          CustomizedTextView(
-            textData: "Coffee mocha Coffee mocha Coffee mocha, Coffee mocha",
-            overflow: TextOverflow.ellipsis,
-            textFontWeight: FontWeight.w600,
-            textFontSize: AppDimens.kFont14,
-          ),
-          SizedBox(height: AppDimens.kMargin4),
+            SizedBox(height: AppDimens.kMargin8),
+            CustomizedTextView(
+              textData: "Coffee mocha Coffee mocha Coffee mocha, Coffee mocha",
+              overflow: TextOverflow.ellipsis,
+              textFontWeight: FontWeight.w600,
+              textFontSize: AppDimens.kFont14,
+            ),
+            SizedBox(height: AppDimens.kMargin4),
 
-          CustomizedTextView(
-            textData: "Deep Form,Coffee mocha,Coffee mocha,Coffee mocha",
-            overflow: TextOverflow.ellipsis,
-            textFontSize: AppDimens.kFont12,
-            textColor: AppColors.kGreyColor,
-            textFontWeight: FontWeight.w500,
-          ),
-          SizedBox(height: AppDimens.kMargin8),
+            CustomizedTextView(
+              textData: "Deep Form,Coffee mocha,Coffee mocha,Coffee mocha",
+              overflow: TextOverflow.ellipsis,
+              textFontSize: AppDimens.kFont12,
+              textColor: AppColors.kGreyColor,
+              textFontWeight: FontWeight.w500,
+            ),
+            SizedBox(height: AppDimens.kMargin8),
 
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomizedTextView(
-                textData: "\$ 4.52",
-                textFontWeight: FontWeight.w600,
-                textFontSize: AppDimens.kFont16,
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                CustomizedTextView(
+                  textData: "\$ 4.52",
+                  textFontWeight: FontWeight.w600,
+                  textFontSize: AppDimens.kFont16,
+                ),
 
-              PrimaryButton(
-                onTapBtn: () {},
-                isDense: true,
-                btnRadius: AppDimens.kRadius10,
-                btnIcon: Icon(Icons.add, color: AppColors.kWhiteColor),
-                isIconOnly: true,
-              ),
-            ],
-          ),
-        ],
+                PrimaryButton(
+                  onTapBtn: () {},
+                  isDense: true,
+                  btnRadius: AppDimens.kRadius10,
+                  btnIcon: Icon(Icons.add, color: AppColors.kWhiteColor),
+                  isIconOnly: true,
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
