@@ -12,6 +12,7 @@ class AppColors {
   static const Color kDarkPrimaryColor = Color(0xFF266EA2);
   static const Color kGreyColor = Color.fromRGBO(162, 162, 162, 1.0);
   static const Color kLightGreyColor = Color.fromRGBO(237, 237, 237, 1.0);
+  static const Color kTextFieldColor = Color.fromRGBO(42, 42, 42, 1.0);
 
   ///App Specific colors
   static const Color kOnBoardingDescTextColor = Color.fromRGBO(145, 145, 145, 1.0);

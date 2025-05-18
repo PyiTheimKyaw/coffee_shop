@@ -1,4 +1,5 @@
 import 'package:coffee_shop/data/vos/coffee_vo.dart';
+import 'package:coffee_shop/pages/index_page.dart';
 import 'package:coffee_shop/pages/order_tracking_page.dart';
 import 'package:go_router/go_router.dart';
 import '../pages/detail_page.dart';
@@ -18,7 +19,7 @@ class AppRouter {
       GoRoute(
         name: RouteConstants.kRouteIndex,
         path: '/index',
-        builder: (context, state) => const OrderTrackingPage(),
+        builder: (context, state) => const IndexPage(),
         routes: [
           GoRoute(
             name: RouteConstants.kRouteDetails,
@@ -35,6 +36,13 @@ class AppRouter {
               final coffee = state.extra! as CoffeeVO?;
               final price = state.uri.queryParameters['price'] ?? "0";
               return OrderPage(coffee: coffee,price:double.tryParse(price));
+            },
+          ),
+          GoRoute(
+            name: RouteConstants.kRouteOrderTrackPage,
+            path: 'orderTrackPage',
+            builder: (context, state) {
+              return OrderTrackingPage();
             },
           ),
         ],

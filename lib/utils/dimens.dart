@@ -39,6 +39,7 @@ class AppDimens {
 
   static const double kSmallIconSize = 15.0;
   static const double kMediumIconSize = 22.0;
+  static const double kLargeIconSize = 30.0;
 
   //App specific sizes
   static const double kGetStartedBtnHeight = 60.0;

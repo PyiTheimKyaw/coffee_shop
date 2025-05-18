@@ -149,7 +149,7 @@ class _OrderBtnSectionView extends StatelessWidget {
                   btnText: kTextOrder,
                   isActive: bloc.chosenCount != 0,
                   onTapBtn: () {
-                    context.pushNamed(RouteConstants.kRouteOrder);
+                    context.pushNamed(RouteConstants.kRouteOrderTrackPage);
                   },
                   btnHeight:
                       (isTablet ?? false)

@@ -196,7 +196,9 @@ class _ProductItemView extends StatelessWidget {
                 ),
 
                 PrimaryButton(
-                  onTapBtn: () {},
+                  onTapBtn: () {
+                    context.pushNamed(RouteConstants.kRouteDetails, extra: coffee);
+                  },
                   isDense: true,
                   btnRadius: AppDimens.kRadius10,
                   btnIcon: Icon(Icons.add, color: AppColors.kWhiteColor),
@@ -240,46 +242,64 @@ class _SearchBarAndBannerSectionView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               CustomizedTextView(
-                textData: "Location",
+                textData: kTextLocation,
                 textColor: AppColors.kGreyColor,
                 textFontSize: AppDimens.kFont14,
               ),
               SizedBox(height: AppDimens.kMargin4),
-              CustomizedTextView(
-                textData: "Bilzen, Tanjungbalai",
-                textColor: AppColors.kWhiteColor,
-                textFontSize: AppDimens.kFont18,
-                textFontWeight: FontWeight.bold,
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  CustomizedTextView(
+                    textData: kTextDummyCustomerAddress,
+                    textColor: AppColors.kWhiteColor,
+                    textFontSize: AppDimens.kFont18,
+                    textFontWeight: FontWeight.bold,
+                  ),
+                  SizedBox(width: AppDimens.kMargin12),
+                  Icon(
+                    Icons.expand_more_outlined,
+                    color: AppColors.kWhiteColor,
+                    size: AppDimens.kMediumIconSize,
+                  ),
+                ],
               ),
               SizedBox(height: AppDimens.kMargin20),
               Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 16),
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.white10,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Row(
-                        children: [
-                          Icon(Icons.search, color: Colors.white54),
-                          SizedBox(width: 10),
-                          Text("Search coffee", style: TextStyle(color: Colors.white54)),
-                        ],
+                    child: TextField(
+                      cursorColor: AppColors.kPrimaryColor,
+                      style: TextStyle(color: AppColors.kWhiteColor),
+                      decoration: InputDecoration(
+                        filled: true,
+                        fillColor: AppColors.kTextFieldColor,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: AppColors.kWhiteColor,
+                          size: AppDimens.kMediumIconSize,
+                        ),
+                        hintText: kTextSearchCoffee,
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.kTextFieldColor),
+                          borderRadius: BorderRadius.circular(AppDimens.kRadius12),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(color: AppColors.kTextFieldColor),
+                          borderRadius: BorderRadius.circular(AppDimens.kRadius12),
+                        ),
                       ),
                     ),
                   ),
-                  SizedBox(width: 10),
+                  SizedBox(width: AppDimens.kMargin12),
                   Container(
                     width: 50,
                     height: 50,
                     decoration: BoxDecoration(
-                      color: Color(0xFFdd855d),
-                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.kPrimaryColor,
+                      borderRadius: BorderRadius.circular(AppDimens.kMargin12),
                     ),
-                    child: Icon(Icons.tune, color: Colors.white),
+                    child: Icon(Icons.tune, color: AppColors.kWhiteColor),
                   ),
                 ],
               ),
