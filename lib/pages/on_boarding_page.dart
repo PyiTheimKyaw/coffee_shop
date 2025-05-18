@@ -16,16 +16,16 @@ class OnBoardingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Responsive(
       mobile: _OnBoardingResponsiveView(),
-      tablet: _OnBoardingResponsiveView(isTablet: true,),
+      tablet: _OnBoardingResponsiveView(isTablet: true),
     );
   }
 }
 
 class _OnBoardingResponsiveView extends StatelessWidget {
-  const _OnBoardingResponsiveView({
-    this.isTablet=false,
-  });
+  const _OnBoardingResponsiveView({this.isTablet = false});
+
   final bool? isTablet;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -71,11 +71,11 @@ class _OnBoardingResponsiveView extends StatelessWidget {
                     btnText: kTextGetStarted,
                     btnHeight: AppDimens.kGetStartedBtnHeight,
                     isDense: isTablet ?? false,
-                    btnWidth:(isTablet ?? false) ?  MediaQuery.of(context).size.width/1.5 : null,
+                    btnWidth: (isTablet ?? false) ? MediaQuery.of(context).size.width / 1.5 : null,
 
                     onTapBtn: () {
                       //navigate to home page
-                      context.goNamed(RouteConstants.kRouteHome);
+                      context.goNamed(RouteConstants.kRouteIndex);
                     },
                     btnTextColor: AppColors.kWhiteColor,
                   ),

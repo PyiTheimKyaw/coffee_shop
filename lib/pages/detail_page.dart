@@ -29,9 +29,7 @@ class DetailPage extends StatelessWidget {
             context.pop();
           },
           child: Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppDimens.kMargin24,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
             child: Icon(Icons.arrow_back_ios, size: AppDimens.kBackIconSize),
           ),
         ),
@@ -48,13 +46,8 @@ class DetailPage extends StatelessWidget {
               ///TODO: to implement like action
             },
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: AppDimens.kMargin24,
-              ),
-              child: FaIcon(
-                FontAwesomeIcons.heart,
-                size: AppDimens.kDetailActionIconSize,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
+              child: FaIcon(FontAwesomeIcons.heart, size: AppDimens.kDetailActionIconSize),
             ),
           ),
         ],
@@ -95,18 +88,13 @@ class _DetailPageResponsiveView extends StatelessWidget {
                         ? MediaQuery.of(context).size.height * 0.3
                         : (MediaQuery.of(context).size.height * 0.25),
                 width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(AppDimens.kRadius16),
-                ),
+                decoration: BoxDecoration(borderRadius: BorderRadius.circular(AppDimens.kRadius16)),
                 child: Image.asset(AppImages.kDummyDetailBG, fit: BoxFit.cover),
               ),
             ),
             SizedBox(height: AppDimens.kMargin24),
             //Item info Section View
-            _ItemInfoSectionView(
-              itemName: 'Caffee Mocha',
-              itemCategory: 'Ice/Hot',
-            ),
+            _ItemInfoSectionView(itemName: 'Caffee Mocha', itemCategory: 'Ice/Hot'),
             SizedBox(height: AppDimens.kMargin8),
 
             _ItemDescriptionAndSizeSectionView(
@@ -129,7 +117,7 @@ class _BuyBtnSectionView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24,vertical: AppDimens.kMargin16),
+      padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24, vertical: AppDimens.kMargin16),
       decoration: BoxDecoration(
         color: AppColors.kWhiteColor,
         borderRadius: BorderRadius.only(
@@ -182,10 +170,7 @@ class _BuyBtnSectionView extends StatelessWidget {
 }
 
 class _ItemDescriptionAndSizeSectionView extends StatelessWidget {
-  const _ItemDescriptionAndSizeSectionView({
-    required this.itemDesc,
-    this.isTablet = false,
-  });
+  const _ItemDescriptionAndSizeSectionView({required this.itemDesc, this.isTablet = false});
 
   final String itemDesc;
   final bool? isTablet;
@@ -241,9 +226,7 @@ class _ItemDescriptionAndSizeSectionView extends StatelessWidget {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(AppDimens.kRadius12),
                 ),
-                labelPadding: EdgeInsets.symmetric(
-                  horizontal: AppDimens.kMargin30,
-                ),
+                labelPadding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin30),
               );
             }),
           ],
@@ -254,10 +237,7 @@ class _ItemDescriptionAndSizeSectionView extends StatelessWidget {
 }
 
 class _ItemInfoSectionView extends StatelessWidget {
-  const _ItemInfoSectionView({
-    required this.itemName,
-    required this.itemCategory,
-  });
+  const _ItemInfoSectionView({required this.itemName, required this.itemCategory});
 
   final String itemName;
   final String itemCategory;
@@ -312,10 +292,7 @@ class _ItemInfoSectionView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Icon(Icons.star, color: Colors.orange),
-            CustomizedTextView(
-              textData: "4.8",
-              textFontSize: AppDimens.kFont20,
-            ),
+            CustomizedTextView(textData: "4.8", textFontSize: AppDimens.kFont20),
             CustomizedTextView(
               textData: "(430)",
               textColor: AppColors.kGreyColor,
@@ -343,14 +320,9 @@ class _AvailableServiceIconView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: AppColors.kItemDetailStatusIconColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(AppDimens.kRadius10),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(AppDimens.kRadius10)),
       elevation: 0,
-      child: Padding(
-        padding: const EdgeInsets.all(AppDimens.kMargin12),
-        child: iconData,
-      ),
+      child: Padding(padding: const EdgeInsets.all(AppDimens.kMargin12), child: iconData),
     );
   }
 }
