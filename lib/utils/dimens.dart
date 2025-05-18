@@ -37,12 +37,9 @@ class AppDimens {
   static const double kRadius20 = 20.0;
   static const double kRadius30 = 30.0;
 
-
   static const double kSmallIconSize = 15.0;
   static const double kMediumIconSize = 22.0;
-
-
-
+  static const double kLargeIconSize = 30.0;
 
   //App specific sizes
   static const double kGetStartedBtnHeight = 60.0;
@@ -55,4 +52,7 @@ class AppDimens {
   static const double kDetailBuyBtnMobileSize = 50.0;
   static const double kDetailBuyBtnTabletSize = 80.0;
   static const double kOrderTabOptionHeight = 60.0;
+  static const double kBottomNavIconSize = 25.0;
+  static const double kOrderChosenItemImgSize = 50.0;
+
 }

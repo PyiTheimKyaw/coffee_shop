@@ -1,8 +1,11 @@
+import 'package:coffee_shop/bloc/order_page_bloc.dart';
+import 'package:coffee_shop/data/vos/coffee_vo.dart';
 import 'package:coffee_shop/utils/images.dart';
 import 'package:coffee_shop/utils/responsive.dart';
 import 'package:coffee_shop/widgets/ghost_button.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 
 import '../utils/colors.dart';
 import '../utils/dimens.dart';
@@ -12,47 +15,74 @@ import '../widgets/customized_text_view.dart';
 import '../widgets/primary_button.dart';
 
 class OrderPage extends StatelessWidget {
-  const OrderPage({super.key});
+  const OrderPage({super.key, this.coffee, this.price});
+
+  final double? price;
+  final CoffeeVO? coffee;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.kAppBgColor,
-      appBar: AppBar(
-        backgroundColor: AppColors.kAppBgColor,
-        centerTitle: true,
-        elevation: 0,
-        //Back icon
-        leading: InkWell(
-          onTap: () {
-            context.pop();
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
-            child: Icon(Icons.arrow_back_ios, size: AppDimens.kBackIconSize),
-          ),
-        ),
-        //Detail title
-        title: CustomizedTextView(
-          textData: kTextOrder,
-          textFontWeight: FontWeight.w600,
-          textFontSize: AppDimens.kFont16,
-        ),
-        bottom: PreferredSize(
-          preferredSize: const Size.fromHeight(AppDimens.kOrderTabOptionHeight),
-          child: Responsive(
-            mobile: _OptionTabView(),
-            tablet: _OptionTabView(isTablet: true),
-          ),
-        ),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) => OrderPageBloc(coffee: coffee, itemPrice: price),
+      child: Selector<OrderPageBloc, String>(
+        selector: (BuildContext context, bloc) => bloc.chosenTab,
+        builder:
+            (BuildContext context, chosenTab, Widget? child) => Scaffold(
+              backgroundColor: AppColors.kAppBgColor,
+              appBar: AppBar(
+                backgroundColor: AppColors.kAppBgColor,
+                centerTitle: true,
+                elevation: 0,
+                //Back icon
+                leading: InkWell(
+                  onTap: () {
+                    context.pop();
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
+                    child: Icon(Icons.arrow_back_ios, size: AppDimens.kBackIconSize),
+                  ),
+                ),
+                //Detail title
+                title: CustomizedTextView(
+                  textData: kTextOrder,
+                  textFontWeight: FontWeight.w600,
+                  textFontSize: AppDimens.kFont16,
+                ),
+                bottom: PreferredSize(
+                  preferredSize: const Size.fromHeight(AppDimens.kOrderTabOptionHeight),
+                  child: Responsive(
+                    mobile: _OptionTabView(),
+                    tablet: _OptionTabView(isTablet: true),
+                  ),
+                ),
+              ),
+              body:
+                  (chosenTab == kTextDeliver)
+                      ? Responsive(
+                        mobile: _ResponsiveOrderPageView(),
+                        tablet: _ResponsiveOrderPageView(isTablet: true),
+                      )
+                      : Responsive(mobile: _PickUpSectionView(), tablet: _PickUpSectionView()),
+              bottomNavigationBar: Responsive(
+                mobile: _OrderBtnSectionView(),
+                tablet: _OrderBtnSectionView(isTablet: true),
+              ),
+            ),
       ),
-      body: Responsive(
-        mobile: _ResponsiveOrderPageView(),
-        tablet: _ResponsiveOrderPageView(isTablet: true),
-      ),
-      bottomNavigationBar: Responsive(
-        mobile: _OrderBtnSectionView(),
-        tablet: _OrderBtnSectionView(isTablet: true),
+    );
+  }
+}
+
+class _PickUpSectionView extends StatelessWidget {
+  const _PickUpSectionView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [CustomizedTextView(textData: "Coming Soon")],
       ),
     );
   }
@@ -65,63 +95,70 @@ class _OrderBtnSectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(AppDimens.kMargin24),
-      decoration: BoxDecoration(
-        color: AppColors.kWhiteColor,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(AppDimens.kRadius20),
-          topRight: Radius.circular(AppDimens.kRadius20),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(
-                Icons.credit_card_sharp,
-                size: AppDimens.kMediumIconSize,
-                color: AppColors.kPrimaryColor,
+    return Consumer<OrderPageBloc>(
+      builder:
+          (BuildContext context, bloc, Widget? child) => Container(
+            padding: EdgeInsets.all(AppDimens.kMargin24),
+            decoration: BoxDecoration(
+              color: AppColors.kWhiteColor,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(AppDimens.kRadius20),
+                topRight: Radius.circular(AppDimens.kRadius20),
               ),
-              SizedBox(width: AppDimens.kMargin16),
-              Expanded(
-                child: Column(
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Row(
                   mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    CustomizedTextView(
-                      textData: kTextCashOrWallet,
-                      textFontWeight: FontWeight.w600,
+                    Icon(
+                      Icons.credit_card_sharp,
+                      size: AppDimens.kMediumIconSize,
+                      color: AppColors.kPrimaryColor,
                     ),
-                    SizedBox(height: AppDimens.kMargin4),
-                    CustomizedTextView(
-                      textData: "\$4.05",
-                      textColor: AppColors.kPrimaryColor,
-                      textFontWeight: FontWeight.w500,
+                    SizedBox(width: AppDimens.kMargin16),
+                    Expanded(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomizedTextView(
+                            textData: kTextCashOrWallet,
+                            textFontWeight: FontWeight.w600,
+                          ),
+                          SizedBox(height: AppDimens.kMargin4),
+                          CustomizedTextView(
+                            textData:
+                                (bloc.priceForAll == 0)
+                                    ? "\$ 0"
+                                    : "\$ ${(bloc.priceForAll ?? 0) + bloc.deliFee}",
+                            textColor: AppColors.kPrimaryColor,
+                            textFontWeight: FontWeight.w500,
+                          ),
+                        ],
+                      ),
                     ),
+                    Icon(Icons.expand_more_outlined, size: AppDimens.kMediumIconSize),
                   ],
                 ),
-              ),
-              Icon(Icons.expand_more_outlined, size: AppDimens.kMediumIconSize),
-            ],
+                SizedBox(height: AppDimens.kMargin24),
+                PrimaryButton(
+                  btnText: kTextOrder,
+                  isActive: bloc.chosenCount != 0,
+                  onTapBtn: () {
+                    context.pushNamed(RouteConstants.kRouteOrderTrackPage);
+                  },
+                  btnHeight:
+                      (isTablet ?? false)
+                          ? AppDimens.kDetailBuyBtnTabletSize
+                          : AppDimens.kDetailBuyBtnMobileSize,
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: AppDimens.kMargin24),
-          PrimaryButton(
-            btnText: kTextOrder,
-            onTapBtn: () {
-              context.pushNamed(RouteConstants.kRouteOrder);
-            },
-            btnHeight:
-                (isTablet ?? false)
-                    ? AppDimens.kDetailBuyBtnTabletSize
-                    : AppDimens.kDetailBuyBtnMobileSize,
-          ),
-        ],
-      ),
     );
   }
 }
@@ -143,13 +180,8 @@ class _ResponsiveOrderPageView extends StatelessWidget {
           children: [
             _DeliveryAddressAndProductItemSectionView(),
             Padding(
-              padding: const EdgeInsets.symmetric(
-                vertical: AppDimens.kMargin12,
-              ),
-              child: Divider(
-                color: AppColors.kPrimaryColor.withValues(alpha: 0.2),
-                thickness: 3,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: AppDimens.kMargin12),
+              child: Divider(color: AppColors.kPrimaryColor.withValues(alpha: 0.2), thickness: 3),
             ),
             _PaymentSummarySectionView(isTablet: isTablet),
           ],
@@ -166,85 +198,94 @@ class _PaymentSummarySectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: Container(
-              width:
-                  (isTablet ?? false)
-                      ? MediaQuery.of(context).size.width * 0.5
-                      : double.infinity,
-              padding: EdgeInsets.symmetric(
-                vertical: AppDimens.kMargin12,
-                horizontal: AppDimens.kMargin16,
-              ),
-              decoration: BoxDecoration(
-                color: AppColors.kWhiteColor,
-                border: Border.all(color: AppColors.kLightGreyColor),
-                borderRadius: BorderRadius.circular(AppDimens.kRadius16),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.energy_savings_leaf,
-                    size: AppDimens.kMediumIconSize,
-                    color: AppColors.kPrimaryColor,
-                  ),
-                  SizedBox(width: AppDimens.kMargin12),
-                  Expanded(
-                    child: CustomizedTextView(
-                      textData: "1 discount is applies",
-                      textFontWeight: FontWeight.w600,
-                      textFontSize: AppDimens.kFont16,
+    return Consumer<OrderPageBloc>(
+      builder:
+          (BuildContext context, bloc, Widget? child) => Padding(
+            padding: const EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Align(
+                  alignment: Alignment.center,
+                  child: Container(
+                    width:
+                        (isTablet ?? false)
+                            ? MediaQuery.of(context).size.width * 0.5
+                            : double.infinity,
+                    padding: EdgeInsets.symmetric(
+                      vertical: AppDimens.kMargin12,
+                      horizontal: AppDimens.kMargin16,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.kWhiteColor,
+                      border: Border.all(color: AppColors.kLightGreyColor),
+                      borderRadius: BorderRadius.circular(AppDimens.kRadius16),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.energy_savings_leaf,
+                          size: AppDimens.kSmallIconSize,
+                          color: AppColors.kPrimaryColor,
+                        ),
+                        SizedBox(width: AppDimens.kMargin12),
+                        Expanded(
+                          child: CustomizedTextView(
+                            textData: kTextDummyDiscount,
+                            textFontWeight: FontWeight.w600,
+                            textFontSize: AppDimens.kFont16,
+                          ),
+                        ),
+                        Icon(Icons.arrow_forward_ios, size: AppDimens.kSmallIconSize),
+                      ],
                     ),
                   ),
-                  Icon(
-                    Icons.arrow_forward_ios,
-                    size: AppDimens.kMediumIconSize,
-                  ),
-                ],
-              ),
+                ),
+                SizedBox(height: AppDimens.kMargin24),
+                CustomizedTextView(
+                  textData: kTextPaymentSummary,
+                  textFontSize: AppDimens.kFont16,
+                  textFontWeight: FontWeight.w600,
+                ),
+                SizedBox(height: AppDimens.kMargin16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomizedTextView(textData: kTextPrice),
+
+                    CustomizedTextView(
+                      textData: "\$ ${bloc.priceForAll ?? bloc.pricePerOne}",
+                      textFontWeight: FontWeight.w600,
+                    ),
+                  ],
+                ),
+                SizedBox(height: AppDimens.kMargin8),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    CustomizedTextView(textData: kTextDeliveryFee),
+                    Row(
+                      children: [
+                        ///TODO: bind with real discount data
+                        CustomizedTextView(
+                          textData: "\$ 2.0",
+                          textDecoration: TextDecoration.lineThrough,
+                        ),
+                        SizedBox(width: AppDimens.kMargin16),
+                        CustomizedTextView(
+                          textData: "\$ ${bloc.deliFee}",
+                          textFontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
-          SizedBox(height: AppDimens.kMargin24),
-          CustomizedTextView(
-            textData: kTextPaymentSummary,
-            textFontSize: AppDimens.kFont16,
-            textFontWeight: FontWeight.w600,
-          ),
-          SizedBox(height: AppDimens.kMargin16),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomizedTextView(textData: kTextPrice),
-
-              CustomizedTextView(
-                textData: "\$ 4.04",
-                textFontWeight: FontWeight.w500,
-              ),
-            ],
-          ),
-          SizedBox(height: AppDimens.kMargin8),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              CustomizedTextView(textData: kTextDeliveryFee),
-
-              CustomizedTextView(
-                textData: "\$ 4.04",
-                textFontWeight: FontWeight.w500,
-              ),
-            ],
-          ),
-        ],
-      ),
     );
   }
 }
@@ -267,12 +308,12 @@ class _DeliveryAddressAndProductItemSectionView extends StatelessWidget {
           ),
           SizedBox(height: AppDimens.kMargin16),
           CustomizedTextView(
-            textData: kTextDeliveryAddress,
+            textData: kTextDummyCustomerName,
             textFontSize: AppDimens.kFont14,
             textFontWeight: FontWeight.w600,
           ),
           CustomizedTextView(
-            textData: kTextDeliveryAddress,
+            textData: kTextDummyCustomerAddress,
             textFontSize: AppDimens.kFont12,
             textColor: AppColors.kGreyColor,
           ),
@@ -281,15 +322,9 @@ class _DeliveryAddressAndProductItemSectionView extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              ButtonWithIconAndText(
-                btnLabel: kTextEditAddress,
-                icon: Icons.edit,
-              ),
+              ButtonWithIconAndText(btnLabel: kTextEditAddress, icon: Icons.edit),
               SizedBox(width: AppDimens.kMargin12),
-              ButtonWithIconAndText(
-                btnLabel: kTextAddNote,
-                icon: Icons.event_note,
-              ),
+              ButtonWithIconAndText(btnLabel: kTextAddNote, icon: Icons.event_note),
             ],
           ),
           Padding(
@@ -299,7 +334,21 @@ class _DeliveryAddressAndProductItemSectionView extends StatelessWidget {
             ),
             child: Divider(),
           ),
-          Row(
+          _ChosenProductItemView(),
+        ],
+      ),
+    );
+  }
+}
+
+class _ChosenProductItemView extends StatelessWidget {
+  const _ChosenProductItemView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Consumer<OrderPageBloc>(
+      builder:
+          (BuildContext context, bloc, Widget? child) => Row(
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -307,8 +356,8 @@ class _DeliveryAddressAndProductItemSectionView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(AppDimens.kRadius12),
                 child: Image.asset(
                   AppImages.kDummyDetailBG,
-                  width: 50,
-                  height: 50,
+                  width: AppDimens.kOrderChosenItemImgSize,
+                  height: AppDimens.kOrderChosenItemImgSize,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -319,12 +368,12 @@ class _DeliveryAddressAndProductItemSectionView extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     CustomizedTextView(
-                      textData: "Caffee Mocha",
+                      textData: bloc.chosenCoffee?.name ?? "",
                       textFontWeight: FontWeight.w600,
                       textFontSize: AppDimens.kFont14,
                     ),
                     CustomizedTextView(
-                      textData: "Caffee Mocha",
+                      textData: bloc.chosenCoffee?.category ?? "",
                       textFontSize: AppDimens.kFont12,
                       textColor: AppColors.kGreyColor,
                       textFontWeight: FontWeight.w500,
@@ -338,33 +387,41 @@ class _DeliveryAddressAndProductItemSectionView extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    Card(
-                      color: AppColors.kWhiteColor,
-                      child: Icon(
-                        Icons.remove,
-                        color: AppColors.kGreyColor,
-                        size: AppDimens.kMediumIconSize,
+                    InkWell(
+                      onTap: () {
+                        bloc.onTapDecreaseCount();
+                      },
+                      child: Card(
+                        color: AppColors.kWhiteColor,
+                        child: Icon(
+                          Icons.remove,
+                          color: AppColors.kGreyColor,
+                          size: AppDimens.kMediumIconSize,
+                        ),
                       ),
                     ),
                     SizedBox(width: AppDimens.kMargin16),
                     CustomizedTextView(
-                      textData: "1",
+                      textData: bloc.chosenCount.toString(),
                       textFontWeight: FontWeight.w600,
                     ),
                     SizedBox(width: AppDimens.kMargin16),
 
-                    Card(
-                      elevation: 1,
-                      color: AppColors.kWhiteColor,
-                      child: Icon(Icons.add, size: AppDimens.kMediumIconSize),
+                    InkWell(
+                      onTap: () {
+                        bloc.onTapIncreaseCount();
+                      },
+                      child: Card(
+                        elevation: 1,
+                        color: AppColors.kWhiteColor,
+                        child: Icon(Icons.add, size: AppDimens.kMediumIconSize),
+                      ),
                     ),
                   ],
                 ),
               ),
             ],
           ),
-        ],
-      ),
     );
   }
 }
@@ -376,56 +433,75 @@ class _OptionTabView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
-      width:
-          (isTablet ?? false)
-              ? MediaQuery.of(context).size.width * 0.6
-              : double.infinity,
-      padding: EdgeInsets.all(AppDimens.kMargin4),
-      decoration: BoxDecoration(
-        color: AppColors.kTabBgColor,
-        borderRadius: BorderRadius.circular(AppDimens.kRadius10),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Expanded(child: _TabView(tabLabel: kTextDeliver, isSelected: true)),
-          Expanded(child: _TabView(tabLabel: kTextPickUp)),
-        ],
-      ),
+    return Consumer<OrderPageBloc>(
+      builder:
+          (BuildContext context, bloc, Widget? child) => Container(
+            margin: EdgeInsets.symmetric(horizontal: AppDimens.kMargin24),
+            width: (isTablet ?? false) ? MediaQuery.of(context).size.width * 0.6 : double.infinity,
+            padding: EdgeInsets.all(AppDimens.kMargin4),
+            decoration: BoxDecoration(
+              color: AppColors.kTabBgColor,
+              borderRadius: BorderRadius.circular(AppDimens.kRadius10),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: _TabView(
+                    tabLabel: kTextDeliver,
+                    isSelected: bloc.chosenTab == kTextDeliver,
+                    onChooseTab: () {
+                      bloc.onChooseTab(selectedTab: kTextDeliver);
+                    },
+                  ),
+                ),
+                Expanded(
+                  child: _TabView(
+                    tabLabel: kTextPickUp,
+                    isSelected: bloc.chosenTab == kTextPickUp,
+                    onChooseTab: () {
+                      bloc.onChooseTab(selectedTab: kTextPickUp);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
     );
   }
 }
 
 class _TabView extends StatelessWidget {
-  const _TabView({required this.tabLabel, this.isSelected = false});
+  const _TabView({required this.tabLabel, this.isSelected = false, required this.onChooseTab});
 
   final String tabLabel;
   final bool? isSelected;
+  final VoidCallback onChooseTab;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.symmetric(
-        horizontal: AppDimens.kMargin24,
-        vertical: AppDimens.kMargin10,
-      ),
-      decoration: BoxDecoration(
-        color: (isSelected ?? false) ? AppColors.kPrimaryColor : null,
-        borderRadius: BorderRadius.circular(AppDimens.kRadius10),
-      ),
-      child: Center(
-        child: CustomizedTextView(
-          textData: tabLabel,
-          textFontWeight:
-              (isSelected ?? false) ? FontWeight.w600 : FontWeight.w400,
-          textFontSize: AppDimens.kFont14,
-          textColor:
-              (isSelected ?? false)
-                  ? AppColors.kWhiteColor
-                  : AppColors.kBlackColor,
+    return GestureDetector(
+      onTap: () {
+        onChooseTab();
+      },
+      child: AnimatedContainer(
+        duration: Duration(milliseconds: 200),
+        padding: EdgeInsets.symmetric(
+          horizontal: AppDimens.kMargin24,
+          vertical: AppDimens.kMargin10,
+        ),
+        decoration: BoxDecoration(
+          color: (isSelected ?? false) ? AppColors.kPrimaryColor : null,
+          borderRadius: BorderRadius.circular(AppDimens.kRadius10),
+        ),
+        child: Center(
+          child: CustomizedTextView(
+            textData: tabLabel,
+            textFontWeight: (isSelected ?? false) ? FontWeight.w600 : FontWeight.w400,
+            textFontSize: AppDimens.kFont14,
+            textColor: (isSelected ?? false) ? AppColors.kWhiteColor : AppColors.kBlackColor,
+          ),
         ),
       ),
     );

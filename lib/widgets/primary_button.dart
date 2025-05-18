@@ -6,7 +6,7 @@ import 'customized_text_view.dart';
 class PrimaryButton extends StatelessWidget {
   const PrimaryButton({
     super.key,
-    required this.btnText,
+    this.btnText,
     this.btnTextFontSize = AppDimens.kFont16,
     this.btnTextColor = AppColors.kWhiteColor,
     this.isActive = true,
@@ -15,9 +15,13 @@ class PrimaryButton extends StatelessWidget {
     this.isDense = false,
     this.btnWidth,
     this.btnHeight,
+    this.isIconOnly = false,
+    this.btnIcon,
+    this.btnRadius,
   });
 
-  final String btnText;
+  final bool? isIconOnly;
+  final String? btnText;
   final double? btnTextFontSize;
   final Color? btnTextColor;
   final bool? isActive;
@@ -26,31 +30,47 @@ class PrimaryButton extends StatelessWidget {
   final bool? isDense;
   final double? btnWidth;
   final double? btnHeight;
+  final Widget? btnIcon;
+  final double? btnRadius;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onTapBtn();
+        if (isActive ?? false) {
+          onTapBtn();
+        }
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: AppDimens.kMargin12),
-        width:(btnWidth!=null)? btnWidth : (isDense ?? false) ? null : double.infinity,
+        padding: EdgeInsets.symmetric(
+          vertical: (isIconOnly ?? false) ? AppDimens.kMargin5 : AppDimens.kMargin12,
+          horizontal: (isIconOnly ?? false) ? AppDimens.kMargin5 : AppDimens.kMargin4,
+        ),
+        width:
+            (btnWidth != null)
+                ? btnWidth
+                : (isDense ?? false)
+                ? null
+                : double.infinity,
         height: btnHeight,
         decoration: ShapeDecoration(
-          color: AppColors.kPrimaryColor,
+          color: (isActive ?? false) ? AppColors.kPrimaryColor : AppColors.kGreyColor,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(btnRadius ?? AppDimens.kRadius16),
           ),
           shadows: boxShadow != null ? [boxShadow!] : [],
         ),
         child: Center(
-          child: CustomizedTextView(
-            textData: btnText,
-            textFontSize: btnTextFontSize,
-            textColor: btnTextColor,
-            textFontWeight: FontWeight.w600,
-            textAlign: TextAlign.center,
+          child: Visibility(
+            visible: !(isIconOnly ?? false),
+            replacement: btnIcon ?? SizedBox.shrink(),
+            child: CustomizedTextView(
+              textData: btnText ?? "",
+              textFontSize: btnTextFontSize,
+              textColor: btnTextColor,
+              textFontWeight: FontWeight.w600,
+              textAlign: TextAlign.center,
+            ),
           ),
         ),
       ),
