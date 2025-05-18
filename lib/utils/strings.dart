@@ -32,3 +32,9 @@ const String kTextCashOrWallet = "Cash/Wallet";
 const String kFirebaseRefCoffeeList = "coffees_list";
 const String kFirebaseRefCoffeeCategories = "categories";
 
+
+///Dummy Strings
+const String kTextDummyCustomerName = "Johny";
+const String kTextDummyCustomerAddress = "Kpg.Sutoyo No.620,Bilzen";
+const String kTextDummyDiscount="1 discount is applies";
+

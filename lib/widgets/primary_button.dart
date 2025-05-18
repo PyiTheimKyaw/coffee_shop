@@ -37,7 +37,9 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onTapBtn();
+        if (isActive ?? false) {
+          onTapBtn();
+        }
       },
       child: Container(
         padding: EdgeInsets.symmetric(
@@ -52,7 +54,7 @@ class PrimaryButton extends StatelessWidget {
                 : double.infinity,
         height: btnHeight,
         decoration: ShapeDecoration(
-          color: AppColors.kPrimaryColor,
+          color: (isActive ?? false) ? AppColors.kPrimaryColor : AppColors.kGreyColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(btnRadius ?? AppDimens.kRadius16),
           ),

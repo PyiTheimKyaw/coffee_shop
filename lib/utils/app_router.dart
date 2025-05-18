@@ -25,13 +25,17 @@ class AppRouter {
             path: 'detail',
             builder: (context, state) {
               final coffee = state.extra! as CoffeeVO?;
-             return  DetailPage(coffee: coffee,);
+              return DetailPage(coffee: coffee);
             },
           ),
           GoRoute(
             name: RouteConstants.kRouteOrder,
             path: 'order',
-            builder: (context, state) => const OrderPage(),
+            builder: (context, state) {
+              final coffee = state.extra! as CoffeeVO?;
+              final price = state.uri.queryParameters['price'] ?? "0";
+              return OrderPage(coffee: coffee,price:double.tryParse(price));
+            },
           ),
         ],
       ),

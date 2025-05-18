@@ -130,10 +130,9 @@ class _BuyBtnSectionView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Selector<DetailPageBloc, String?>(
-      selector: (BuildContext context, bloc) => bloc.price,
+    return Consumer<DetailPageBloc>(
       builder:
-          (BuildContext context, price, Widget? child) => Container(
+          (BuildContext context, bloc, Widget? child) => Container(
             padding: EdgeInsets.symmetric(
               horizontal: AppDimens.kMargin24,
               vertical: AppDimens.kMargin16,
@@ -162,7 +161,7 @@ class _BuyBtnSectionView extends StatelessWidget {
                       ),
                       SizedBox(height: AppDimens.kMargin4),
                       CustomizedTextView(
-                        textData: "\$ $price",
+                        textData: "\$ ${bloc.price ?? "0"}",
                         textColor: AppColors.kPrimaryColor,
                         textFontSize: AppDimens.kFont20,
                         textFontWeight: FontWeight.w600,
@@ -176,8 +175,9 @@ class _BuyBtnSectionView extends StatelessWidget {
                   child: PrimaryButton(
                     btnText: kTextBuyNow,
                     onTapBtn: () {
-                      context.pushNamed(RouteConstants.kRouteOrder);
+                      context.pushNamed(RouteConstants.kRouteOrder, extra: bloc.coffeeDetail,queryParameters: {"price" : bloc.price});
                     },
+                    isActive: bloc.price!=null,
                     btnHeight:
                         (isTablet ?? false)
                             ? AppDimens.kDetailBuyBtnTabletSize

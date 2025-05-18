@@ -52,5 +52,6 @@ class AppDimens {
   static const double kDetailBuyBtnTabletSize = 80.0;
   static const double kOrderTabOptionHeight = 60.0;
   static const double kBottomNavIconSize = 25.0;
+  static const double kOrderChosenItemImgSize = 50.0;
 
 }
