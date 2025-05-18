@@ -1,5 +1,6 @@
 import 'package:coffee_shop/data/vos/coffee_vo.dart';
 import 'package:coffee_shop/pages/index_page.dart';
+import 'package:coffee_shop/pages/order_tracking_page.dart';
 import 'package:go_router/go_router.dart';
 import '../pages/detail_page.dart';
 import '../pages/on_boarding_page.dart';
@@ -18,7 +19,7 @@ class AppRouter {
       GoRoute(
         name: RouteConstants.kRouteIndex,
         path: '/index',
-        builder: (context, state) => const IndexPage(),
+        builder: (context, state) => const OrderTrackingPage(),
         routes: [
           GoRoute(
             name: RouteConstants.kRouteDetails,

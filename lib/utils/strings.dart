@@ -35,3 +35,5 @@ const String kFirebaseRefCoffeeCategories = "categories";
 const String kTextDummyCustomerName = "Johny";
 const String kTextDummyCustomerAddress = "Kpg.Sutoyo No.620,Bilzen";
 const String kTextDummyDiscount = "1 discount is applies";
+
+const String kGoogleApiKey = "AIzaSyCMZsgwgDD1XkUdDWRTQhQz78N7mGlkQ4I";
