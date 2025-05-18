@@ -1,7 +1,6 @@
 import 'package:coffee_shop/pages/index_page.dart';
 import 'package:go_router/go_router.dart';
 import '../pages/detail_page.dart';
-import '../pages/home_page.dart';
 import '../pages/on_boarding_page.dart';
 import '../pages/order_page.dart';
 import 'route_constants.dart';
